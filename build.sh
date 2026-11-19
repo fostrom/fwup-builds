@@ -16,7 +16,7 @@ if [ -d "$cache" ]; then
 fi
 
 mkdir -p "$work/bin"
-printf '#!/bin/sh\nexec %s "$@"\n' "$*" > "$work/bin/$host-gcc"
+printf '#!/bin/sh\nexec %s "$@"\n' "$*" >"$work/bin/$host-gcc"
 chmod +x "$work/bin/$host-gcc"
 export PATH=$work/bin:$PATH
 
@@ -52,5 +52,8 @@ case $(uname -sm) in
     *) native= ;;
 esac
 if [ "$name" = "$native" ]; then
-    [ "$("$out" --version)" = "${tag#v}" ] || { echo "build: $out does not report ${tag#v}" >&2; exit 1; }
+    [ "$("$out" --version)" = "${tag#v}" ] || {
+        echo "build: $out does not report ${tag#v}" >&2
+        exit 1
+    }
 fi

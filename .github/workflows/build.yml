@@ -1,7 +1,6 @@
 name: build
 
 on:
-  push: { branches: [main] }
   workflow_dispatch:
 
 permissions: { contents: read }
@@ -17,6 +16,8 @@ jobs:
     env: { GH_TOKEN: "${{ github.token }}" }
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - id: tag
         run: |
           tag=v$(cat VERSION)
@@ -37,6 +38,8 @@ jobs:
     env: { TAG: "${{ needs.tag.outputs.tag }}", AR: zig ar, RANLIB: zig ranlib }
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - uses: mlugg/setup-zig@d1434d08867e3ee9daa34448df10607b98908d29 # v2.2.1
         with: { version: 0.17.1 }
       - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
@@ -79,6 +82,8 @@ jobs:
       HOMEBREW_NO_INSTALL_CLEANUP: 1
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with: { path: deps, key: "deps-v1-macos-${{ needs.tag.outputs.deps }}" }
       - run: |
